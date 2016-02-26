@@ -22,12 +22,11 @@ MongoClient.connect("mongodb://localhost:27017/matchinggenerations", function(er
 	}
 });
 
-
 var app = express();
 app.use(expressWinston.logger(config.WINSTON_LOGGER_OPTS));
 app.use(compression());
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'50mb'}));
 
 app.use(express.static(__dirname + '/uploads'));
 
