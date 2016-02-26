@@ -29,7 +29,7 @@ app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.use(express.static(__dirname + '/uploads'));
+app.use(express.static(__dirname + '/uploads'));
 
 app.use(function(req, res, next){
   req.db = db;

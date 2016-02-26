@@ -1,6 +1,7 @@
 var express = require('express');
 var router = module.exports = express.Router();
 var mongo = require('mongodb');
+var multer = require('multer');
 
 var collectionName = 'estudiant';
 
@@ -33,6 +34,34 @@ router.post('/update', function(req, res) {
   }}, function(error, data) {
     if (error) res.status(500).json(error);
     else res.status(200).json(data);
+  });
+});
+
+
+router.post('/uploadImage/:estudiantId', function(req, res) {
+  var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, './uploads');
+    },
+    filename: function (req, file, callback) {
+      //file.originalname
+      callback(null, 'e' + '-' + Date.now() + '.' + file.originalname.split('.').pop());
+    }
+  });
+  var upload = multer({ storage : storage }).single('foto');
+
+  upload(req, res, function(err) {
+    //req.file.path
+    if (err) res.status(500).json(err);
+    else {
+      var id = mongo.ObjectID(req.params.estudiantId);
+      var collection = req.db.collection(collectionName);
+      var fileName = req.file.path.split('/').pop();
+      collection.update({ '_id' : id }, {$set : { 'foto' : fileName }}, function(err, result) {
+        if (err) res.status(500).json(err);
+        else res.status(200).json(result);
+      });
+    }
   });
 });
 
