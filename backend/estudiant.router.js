@@ -24,7 +24,7 @@ router.post('/update', function(req, res) {
     return;
   }
   var collection = req.db.collection(collectionName);
-  var id = mongod.ObjectID(req.body._id);
+  var id = mongo.ObjectID(req.body._id);
   collection.update({ _id : id }, { $set : {
     'nom' : req.body.nom,
     'cognoms' : req.body.cognoms,
