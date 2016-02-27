@@ -35,6 +35,7 @@ app.use(function(req, res, next){
   next();
 });
 
+app.use('/solicitud', routers.solicitud);
 app.use('/estudiant', routers.estudiant);
 app.use('/pis', routers.pis);
 

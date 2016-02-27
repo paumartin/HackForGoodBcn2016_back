@@ -11,7 +11,8 @@ router.post('/save', function(req, res) {
     'nom' : req.body.nom,
     'cognoms' : req.body.cognoms,
     'genere' : req.body.genere,
-    'dataNaixement' : req.body.dataNaixement
+    'dataNaixement' : req.body.dataNaixement,
+    'telefon' : req.body.telefon
   }, function(error, data) {
     if (error) res.status(500).json(error);
     else res.status(200).json(data);
@@ -30,7 +31,8 @@ router.post('/update', function(req, res) {
     'nom' : req.body.nom,
     'cognoms' : req.body.cognoms,
     'genere' : req.body.genere,
-    'dataNaixement' : req.body.dataNaixement
+    'dataNaixement' : req.body.dataNaixement,
+    'telefon' : req.body.telefon
   }}, function(error, data) {
     if (error) res.status(500).json(error);
     else res.status(200).json(data);
@@ -52,13 +54,19 @@ router.post('/uploadImage/:estudiantId', function(req, res) {
 
   upload(req, res, function(err) {
     //req.file.path
-    if (err) res.status(500).json(err);
+    if (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
     else {
       var id = mongo.ObjectID(req.params.estudiantId);
       var collection = req.db.collection(collectionName);
       var fileName = req.file.path.split('/').pop();
       collection.update({ '_id' : id }, {$set : { 'foto' : fileName }}, function(err, result) {
-        if (err) res.status(500).json(err);
+        if (err) {
+          console.log(err);
+          res.status(500).json(err);
+        }
         else res.status(200).json(result);
       });
     }
