@@ -55,6 +55,15 @@ router.post('/update', function(req, res) {
   });
 });
 
+router.get('/search/:str', function(req, res) {
+  var str = req.params.str;
+  var collection = req.db.collection(collectionName);
+  collection.find({$or : [{"ciutat" : {$regex : ".*"+str+".*", $options : "-i"}}, {"titol" : {$regex : ".*"+str+".*", $options : "-i"}}]}).toArray(function(error, data) {
+    if (error) res.status(500).json(error);
+    else res.status(200).json(data);
+  });
+});
+
 router.get('/get/:pisId', function(req, res) {
   var collection = req.db.collection(collectionName);
   var id = mongo.ObjectID(req.params.pisId);
